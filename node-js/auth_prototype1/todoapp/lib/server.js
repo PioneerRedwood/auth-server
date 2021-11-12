@@ -83,7 +83,14 @@ function authenticate(req, res, next) {
 }
 
 /**
- * 이 핸들러는 'req.params' 요청에 대한 파라미터를 로드
+ * 이 핸들러는 'req.params' 요청에 대한 '다수'의 파라미터를 로드
+ * 2021-10-21 디버깅 결과
+ * Git에 있는 curl의 명령 실행으론
+ * curl -isS http://127.0.0.1:8080/todo -X POST -d name=demo -d task="buy milk"
+ * req.params 값에 아무것도 들어가지 않는 것을 확인했다.
+ * 
+ * POSTMAN에서 여러가지를 시도한 끝에 POST요청은 다양한 방식으로 가능하다.
+ * 확실한 것은 URI에 전송 데이터를 숨길 수 있어야 한다는 것이다.
  * 
  * POST /todo?name=foo HTTP/1.1
  * Host: localhost
@@ -95,10 +102,6 @@ function authenticate(req, res, next) {
  * 'name', 'task' 두 개의 파라미터 값이 유효
  */
 function createTodo(req, res, next) {
-    // 왜 이쪽에 와서 req 파라미터 값이 없는걸까??
-    // console.log("@@DEBUG@@ " + req.params.name + " : " + req.params.task);
-    // task가 없으면 에러
-    // 이 부분 디버깅해야함
     if (!req.params.task) {
         req.log.warn({ params: p }, 'createTodo: missing task');
         next(new errors.BadRequestError("There is no params recv: [" + req.params.name + "]["+ req.params.task + "]"));
@@ -111,7 +114,6 @@ function createTodo(req, res, next) {
         task: req.params.task
     };
 
-    // console.log("@@DEBUG@@ " + todo.name + " " + todo.task);
     // 만약 기존에 존재하면 에러
     if (req.todos.indexOf(todo.name) !== -1) {
         req.log.warn('%s already exists', todo.name);
@@ -265,7 +267,7 @@ function listTodos(req, res, next) {
 }
 
 /**
- * TODO를 완전히 대체
+ * TODO를 완전히 대체 - 변경
  */
 function putTodo(req, res, next) {
     if (!req.params.task) {
@@ -357,15 +359,17 @@ function createServer(options) {
     // TODO에 대한 진짜 CRUD 핸들러
     server.use(loadTodos);
 
-    server.post('/todo', createTodo);
+    server.post('/todo/:name/:task', createTodo);
     server.get('/todo', listTodos);
     server.head('/todo', listTodos);
 
     // 나머지 것들은 TODO가 존재해야 수행 가능!
-    server.use(ensureTodo);
+    server.use(ensureTodo); //?
 
     // 이름에 맞는 TODO 반환
-    server.get('/todo/:name', getTodo);
+    server.get('/todo/:name', function(req, res, next) {
+        
+    });
     server.head('/todo/:name', getTodo);
 
     // 완전한 TODO 오버라이딩 body가 반드시 JSON이어야 함

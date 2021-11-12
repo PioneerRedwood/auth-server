@@ -3,7 +3,6 @@
  * red-prototype-server
  * DB없는 RESTful API server 1차 프로토타입
  * C++ 서버에서 통신이 가능해야 함
- * 
  */
 
 const restify = require('restify');
