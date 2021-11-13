@@ -102,16 +102,47 @@ server.post('/signup/:id/:pwd/:name', function (req, res, next) {
 // sign in - get
 server.get('/signin/:id/:pwd', function (req, res, next) {
     if (req.params.id && req.params.pwd) {
-        // DB 접근
         console.log(JSON.stringify({ id: req.params.id, pwd: req.params.pwd }));
-        res.json({
-            id: req.params.id
-        });
-        next();
+        // DB 접근
+        var sql = 
+            'SELECT ACCOUNT_ID, USER_PWD, USER_NAME, USER_ID, LAST_LOGIN_DATE \
+            FROM RED_USER \
+            WHERE ACCOUNT_ID = ?';
+        var params = [req.params.id];
+        dbConn.query(
+            sql,
+            params,
+            function(error, result, fields) {
+                if(error) {
+                    // 쿼리 에러 -- 서버 에러
+                    log(error);
+                    next(new errors.InternalError());
+                } else {
+                    if(result.length > 0) {
+                        // 비밀번호가 맞는지
+                        if(req.params.pwd == result[0]['USER_PWD']) {
+                            log(result);
+                            res.send(result);
+                            // 데이터 보내고 마지막 로그인 날짜 변경하기
+                            // 로그인한 상태에 대한 변수 추가
+                            next();
+                        } else {
+                            log("password is not correct");
+                            next(new errors.NotAuthorizedError());
+                        }
+                    } else {
+                        // 해당 유저 정보가 없음
+                        log("no data");
+                        next(new errors.NotFoundError());
+                    }
+                }
+            }
+        );
     } else {
         next(new errors.MissingParameterError());
         return;
     }
+    return;
 });
 
 // get account info
@@ -119,15 +150,42 @@ server.get('/account/:id', function (req, res, next) {
     if (req.params.id) {
         console.log(JSON.stringify({ id: req.params.id }));
         // DB 접근
-        res.send(200, { response: 'OK' });
-        next();
+        var sql = 
+            'SELECT ACCOUNT_ID, USER_NAME, USER_ID, IS_LOGGED_IN \
+            FROM RED_USER \
+            WHERE ACCOUNT_ID = ?';
+        var params = req.params.id;
+        dbConn.query(
+            sql,
+            params,
+            function(error, result, fields) {
+                if(error) {
+                    // 쿼리 에러 -- 서버 에러
+                    log(error);
+                    next(new errors.InternalError());
+                } else {
+                    if(result.length > 0) {
+                        // 비밀번호가 맞는지
+                        log(result);
+                        res.send(result);
+                        next();
+                    } else {
+                        // 해당 유저 정보가 없음
+                        log("no data");
+                        next(new errors.NotFoundError());
+                    }
+                }
+            }
+        );
+
     } else {
         next(new errors.MissingParameterError());
         return;
     }
+
+    return;
 });
 
 server.listen(8081, function () {
     console.log('%s started %s', server.name, server.url);
-    // console.log('auth_server started %s', port);
 });

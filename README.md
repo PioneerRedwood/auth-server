@@ -25,3 +25,39 @@
 - Python 기반의 django
 - Java 기반의 spring framework
 - Node-js 기반의 Express.JS / Socket.io / Restify.JS
+
+
+
+## Node-js Restify가 선택됨
+
+#### auth_prototype1
+
+- 공식 문서나 깃에 있는 여러 예시들을 따라하며 익숙해지며 1차 프로토타입 개발
+
+#### auth_prototype2
+
+- MySQL 적용한 2차 프로토타입 개발
+- sql 파일 적용
+
+
+
+##### MySQL 기록
+
+- C:\Program Files\MySQL\MySQL Server 8.0\data 서버 데이터 경로
+- C:\Program Files\MySQL\MySQL Server 8.0\bin 서버 실행 파일 경로
+
+```bash
+C:\Program Files\MySQL\MySQL Server 8.0\bin> mysqld --initialize-insecure
+C:\Program Files\MySQL\MySQL Server 8.0\bin> mysqld --standalone
+
+.. in other cmd window .. 
+
+C: ...> color 02
+C: ...> mysql -u root -p
+Enter password: _
+
+mysql> ...
+```
+
+
+
