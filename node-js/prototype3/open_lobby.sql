@@ -3,25 +3,12 @@
 https://www.researchgate.net/publication/323787227_Openlobby_an_open_game_server_for_lobby_and_matchmaking
 DATABASE: OPEN_LOBBY 
 TABLES
-    GAME, PLAYER(USER), GAME_SESSION, MATCHING_QUEUE
+    GAME, PLAYER, GAME_SESSION, MATCHING_QUEUE, RED_USER
 */
 
 -- 초기 데이터베이스 생성
-CREATE DATABASE RED_DB;
-USE RED_DB;
--- deprecated
-{
-    CREATE TABLE PLAYER
-    (
-        PLAYER_ID INT(10) NOT NULL,
-        USER_NAME VARCHAR(30) NOT NULL,
-        GAME_ID INT(10) NOT NULL,
-        EXPERIENCE VARCHAR(30),
-        PROPERTIES VARCHAR(30),
-        PRIMARY KEY (PLAYER_ID),
-        FOREIGN KEY (GAME_ID) REFERENCES GAME(GAME_ID) ON UPDATE CASCADE
-    );
-}
+CREATE DATABASE open_lobby;
+USE open_lobby;
 
 -- RED_USER QUERIES
 {

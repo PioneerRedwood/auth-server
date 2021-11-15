@@ -43,6 +43,8 @@
 
 ##### MySQL 기록
 
+MySQL Server 8.0 install..
+
 - C:\Program Files\MySQL\MySQL Server 8.0\data 서버 데이터 경로
 - C:\Program Files\MySQL\MySQL Server 8.0\bin 서버 실행 파일 경로
 
@@ -57,6 +59,15 @@ C: ...> mysql -u root -p
 Enter password: _
 
 mysql> ...
+```
+
+
+
+NetService 이름: 211115_MySQL
+
+```bash
+C:\Program Files\MySQL\MySQL Server 8.0\bin> net start 211115_MySQL
+C:\Program Files\MySQL\MySQL Server 8.0\bin> net stop 211115_MySQL
 ```
 
 
