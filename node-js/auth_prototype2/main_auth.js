@@ -98,7 +98,6 @@ server.post('/signup/:id/:pwd/:name', function (req, res, next) {
     }
 });
 
-
 // sign in - get
 server.get('/signin/:id/:pwd', function (req, res, next) {
     if (req.params.id && req.params.pwd) {
