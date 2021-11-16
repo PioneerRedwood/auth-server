@@ -28,8 +28,8 @@ const errors = require("restify-errors");
 {
   var dbHost = "localhost";
   var dbUser = "root";
-  // var dbPwd = '';
-  var dbPwd = "1111";
+  var dbPwd = '';
+  // var dbPwd = "1111";
   var dbName = "open_lobby";
 
   var conn = mysql.createConnection({
@@ -673,6 +673,33 @@ server.put(
     return;
   }
 );
+
+server.get('/test/:id/:pwd', function(req, res, next) {
+  if(req.params.id && req.params.pwd) {
+    conn.query(
+      'CALL CHECK_USER(?, ?, @_value);',
+      [req.params.id, req.params.pwd],
+      function(error, result) {
+        if(error) {
+          next();
+          return;
+        } else {
+          conn.query(
+            'select @_value;',
+            function(error, result) {
+              res.send({result: result});
+              next();
+              return;
+            }
+          );
+        }
+      }
+    );
+  } else {
+    next();
+    return;
+  }
+});
 
 server.listen(8081, function () {
   console.log("%s started %s", server.name, server.url);
