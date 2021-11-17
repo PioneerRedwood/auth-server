@@ -28,8 +28,8 @@ const errors = require("restify-errors");
 {
   var dbHost = "localhost";
   var dbUser = "root";
-  var dbPwd = '';
-  // var dbPwd = "1111";
+  // var dbPwd = '';
+  var dbPwd = "1111";
   var dbName = "open_lobby";
 
   var conn = mysql.createConnection({
