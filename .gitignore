@@ -30,3 +30,10 @@
 *.exe
 *.out
 *.app
+
+
+# Node modules directory
+node-js/node_modules
+
+# vs code auto generated directory
+node-js/.vscode/
